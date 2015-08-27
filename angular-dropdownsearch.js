@@ -21,8 +21,8 @@ angular.module('angular-dropdownsearch', [])
                     var isActive            = false;
                     var currentSelected     = 0;
 
-                    scope.title;
-                    scope.formval;
+                    scope.title             = null;
+                    scope.formval           = null;
                     scope.isPopupVisible    = false;
                     scope.activeclass       = 'disabled';
                     scope.searchText        = '';
@@ -91,7 +91,7 @@ angular.module('angular-dropdownsearch', [])
                                 element.find( 'input' )[0].focus();
                             });
                         }
-                    }
+                    };
 
                     $document.bind('keydown', function( event ){
                         if( !isActive || !scope.isPopupVisible ){
@@ -167,7 +167,24 @@ angular.module('angular-dropdownsearch', [])
                     });
                 },
 
-                templateUrl: 'modules/search-dropdown/client/views/search-dropdown.html'
+                template:   '<div class="search-dropdown-result" ng-click="toggleSelect()" ng-class="activeclass">'+
+                                '<p>{{ title }} <span class="pull-right">&#9660;</span></p>' +
+                            '</div>' +
+                            '<div class="search-dropdown-wrap" ng-show="isPopupVisible">' +
+                                '<div class="input-wrap">' +
+                                    '<input type="text" ng-model="searchText"/>' +
+                                '</div>' +
+                                '<ul class="result-list">' +
+                                    '<li ng-repeat="result in resultList = ( results | filter:searchText )"' +
+                                        'class="result-list-item"' +
+                                        'ng-class="isActiveItem( $index )"' +
+                                        'ng-mouseover="hoverItem( $index )"' +
+                                        'data-dropdown-result-slug="{{ result.slug }}"' +
+                                        'data-dropdown-result="{{ result.title }}"' +
+                                        'data-index="{{ $index }}"' +
+                                        'data-length="{{ resultList.length }}">{{ result.title }}</li>' +
+                                '</ul>' +
+                            '</div>'
 
             };
         }
